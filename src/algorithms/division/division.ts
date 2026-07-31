@@ -1,5 +1,6 @@
 import { convertDecimal } from "../conversion/conversion"
 import { twosComplement } from "../helpers/twosComplement"
+import { addition } from "../helpers/addition"
 
 export interface DivisionStates {
     A: string,      Q: string, // states shifted left for every loop
@@ -19,6 +20,9 @@ function isSameType(a: number|string, b: number|string) {
 export function division(dividend: number|string, divisor: number|string, size: number): DivisionResult {
     const states: Partial<DivisionStates> = {};
     const range = 2 ** (size-1) - 1
+    let state_Q = ''
+    let state_M = ''
+    let state_M_2 = ''
 
     // check if the operands are in the same radix
     if (!isSameType(dividend, divisor)) {
@@ -37,10 +41,9 @@ export function division(dividend: number|string, divisor: number|string, size: 
         }
 
         // convert to binary and store the states
-        states.Q = convertDecimal(dividend.toString(), size).unsigned.binary!
-        states.A = '0'.repeat(size + 1)
-        states.M = '0' + convertDecimal(divisor.toString(), size).unsigned.binary!
-        states.M_2 = twosComplement(states.M)
+        state_Q = convertDecimal(dividend.toString(), size).unsigned.binary!
+        state_M = '0' + convertDecimal(divisor.toString(), size).unsigned.binary!
+        state_M_2 = twosComplement(state_M)
     }
 
     // if the operands are in binary
@@ -57,16 +60,21 @@ export function division(dividend: number|string, divisor: number|string, size: 
         }
 
         // reformat binary to have appropriate leading zeros
-        states.Q = '0'.repeat(size - dividend_reformat.length) + dividend_reformat
-        states.A = '0'.repeat(size + 1)
-        states.M = '0'.repeat((size + 1) - dividend_reformat.length) + divisor_reformat
-        states.M_2 = twosComplement(states.M)
+        state_Q = '0'.repeat(size - dividend_reformat.length) + dividend_reformat
+        state_M = '0'.repeat((size + 1) - divisor_reformat.length) + divisor_reformat
+        
+        state_M_2 = twosComplement(state_M)
     }
 
+    states.A = '0'.repeat(size + 1)
+    states.Q = state_Q
+    states.M = state_M
+    states.M_2 = state_M_2
+
     for (let i = 0; i < size; i++) {
-        let A_temp = states.A!.split('')
-        let Q_temp = states.Q!.split('')
-        let aux_carry = ''
+        let A_temp: string[] = states.A.split('')
+        let Q_temp: string[] = states.Q.split('')
+        let aux_carry: string = ''
 
         // 1. shift [A:Q] to the left
         A_temp.shift()
@@ -79,24 +87,24 @@ export function division(dividend: number|string, divisor: number|string, size: 
 
         // 2. compute the new A state
         if (states.A.charAt(0) === '0') {
-            states.A = addition(states.A, states.M_2, states.A.length)
+            states.A = addition(states.A, states.M_2)
         }
         else {
-            states.A = addition(states.A, states.M, states.A.length)
+            states.A = addition(states.A, states.M)
         }
 
         // 3. fill out Q's LSb based on A's sign
         if (states.A.charAt(0) === '0') {
-            states.Q = states.Q.replace('_', '1')
+            states.Q = states.Q!.replace('_', '1')
         }
         else {
-            states.Q = states.Q.replace('_', '0')
+            states.Q = states.Q!.replace('_', '0')
         }
     }
 
     // 4. restore if A is still negative
     if (states.A.charAt(0) === '1') {
-        states.A = addition(states.A, states.M, states.A.length)
+        states.A = addition(states.A, states.M)
     }
 
     return {
