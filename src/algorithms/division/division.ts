@@ -43,6 +43,7 @@ export function division(dividend: number|string, divisor: number|string, size: 
         states.M_2 = twosComplement(states.M)
     }
 
+    // if the operands are in binary
     if (typeof dividend === 'string' && typeof divisor === 'string') {
         // remove leading zeros
         const dividend_reformat = dividend.trim().replace(/^0+/, '') || '0';
@@ -84,7 +85,7 @@ export function division(dividend: number|string, divisor: number|string, size: 
             states.A = addition(states.A, states.M, states.A.length)
         }
 
-        // 3. fill out A's LSb based on A's sign
+        // 3. fill out Q's LSb based on A's sign
         if (states.A.charAt(0) === '0') {
             states.Q = states.Q.replace('_', '1')
         }
