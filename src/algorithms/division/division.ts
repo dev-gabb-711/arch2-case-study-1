@@ -17,7 +17,6 @@ function isSameType(a: number|string, b: number|string) {
 }
 
 export function division(dividend: number|string, divisor: number|string, size: number): DivisionResult {
-    const result: Partial<DivisionResult> = {};
     const states: Partial<DivisionStates> = {};
     const range = 2 ** (size-1) - 1
 
@@ -63,26 +62,44 @@ export function division(dividend: number|string, divisor: number|string, size: 
         states.M_2 = twosComplement(states.M)
     }
 
-    /*
-        main algo
-            1. shift [A:Q] to the left
-                A_msb is discarded
-                Q_msb will transfer to A_lsb
-                Q will have missing lsb '_'
-            2. if (A is +) A = A - M
-                else A = A + M
-            3. if (A is +) Q_lsb = 1
-                else Q_lsb = 0
-            ------ repeat from 1 by divisor.unsigned.binary.length() ------
-            4. if (A is -) A = A + M
+    for (let i = 0; i < size; i++) {
+        let A_temp = states.A!.split('')
+        let Q_temp = states.Q!.split('')
+        let aux_carry = ''
 
-        assign the ff to DivisionResult:
-            Q = Q
-            R = A
-        and return
+        // 1. shift [A:Q] to the left
+        A_temp.shift()
+        aux_carry = Q_temp.shift()!
+        A_temp.push(aux_carry)
+        Q_temp.push('_')
 
-        prerequisites: twosComplement.ts, addition.ts, toDecimal.ts
-    */
+        states.A = A_temp.join('')
+        states.Q = Q_temp.join('')
 
-    return {}
+        // 2. compute the new A state
+        if (states.A.charAt(0) === '0') {
+            states.A = addition(states.A, states.M_2)
+        }
+        else {
+            states.A = addition(states.A, states.M)
+        }
+
+        // 3. fill out A's LSb based on A's sign
+        if (states.A.charAt(0) === '0') {
+            states.Q = states.Q.replace('_', '1')
+        }
+        else {
+            states.Q = states.Q.replace('_', '0')
+        }
+    }
+
+    // 4. restore if A is still negative
+    if (states.A.charAt(0) === '1') {
+        states.A = addition(states.A, states.M)
+    }
+
+    return {
+        Q: states.Q,
+        R: states.A
+    }
 }
