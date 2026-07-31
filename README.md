@@ -41,7 +41,7 @@ Process: Integer arithmetic and conversion.
 - implemented DivisionStates and DivisionResult, added partial pseudocode for division function
 
 **July 31, 2026**
-- implemented 2's complement helper function, added input checking and formatting for division operands
+- implemented 2's complement helper function, added input checking and formatting for division operands, implemented non-restoring division
 
 ## References
 
