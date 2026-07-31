@@ -37,6 +37,12 @@ Process: Integer arithmetic and conversion.
 
 ## Incremental Progress
 
+**July 30, 2026**
+- implemented DivisionStates and DivisionResult, added partial pseudocode for division function
+
+**July 31, 2026**
+- implemented 2's complement helper function, added input checking and formatting for division operands
+
 ## References
 
 ## AI Disclosure
