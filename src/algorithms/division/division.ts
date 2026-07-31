@@ -56,9 +56,9 @@ export function division(dividend: number|string, divisor: number|string, size: 
         }
 
         // reformat binary to have appropriate leading zeros
-        states.Q = '0'.repeat(size - dividend_reformat.length + 1) + dividend_reformat
+        states.Q = '0'.repeat(size - dividend_reformat.length) + dividend_reformat
         states.A = '0'.repeat(size + 1)
-        states.M = '0'.repeat(size - dividend_reformat.length + 2) + divisor_reformat
+        states.M = '0'.repeat((size + 1) - dividend_reformat.length) + divisor_reformat
         states.M_2 = twosComplement(states.M)
     }
 
@@ -78,10 +78,10 @@ export function division(dividend: number|string, divisor: number|string, size: 
 
         // 2. compute the new A state
         if (states.A.charAt(0) === '0') {
-            states.A = addition(states.A, states.M_2)
+            states.A = addition(states.A, states.M_2, states.A.length)
         }
         else {
-            states.A = addition(states.A, states.M)
+            states.A = addition(states.A, states.M, states.A.length)
         }
 
         // 3. fill out A's LSb based on A's sign
@@ -95,7 +95,7 @@ export function division(dividend: number|string, divisor: number|string, size: 
 
     // 4. restore if A is still negative
     if (states.A.charAt(0) === '1') {
-        states.A = addition(states.A, states.M)
+        states.A = addition(states.A, states.M, states.A.length)
     }
 
     return {
