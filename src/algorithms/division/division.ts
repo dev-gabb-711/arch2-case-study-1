@@ -48,15 +48,7 @@ function isSameType(a: number|string, b: number|string) {
 
 export function division(dividend: number|string, divisor: number|string, size: number): DivisionResult {
     const states: Partial<DivisionStates> = {};
-
-    // check if data size is valid (Rejects: 0, 1, -1, 2.5, NaN)
-    if (!Number.isInteger(size) || size < 2) {
-        return {
-            error: 'Data size must be an integer of at least 2 bits'
-        }
-    }
-
-    const range = 2 ** size - 1
+    const range = 2 ** (size-1) - 1
     let state_Q = ''
     let state_M = ''
     let state_M_2 = ''
