@@ -195,6 +195,15 @@ function App() {
         }
     }
 
+    function clearMultiplication() {
+    setMultiplicandInput("");
+    setMultiplierInput("");
+    setMultiplicationBitSize(8);
+    setMultiplicationInputMode("decimal");
+    setMultiplicationResult(null);
+    setMultiplicationError("");
+    }
+
     // HOME PAGE
     function renderHome() {
         return (
@@ -261,7 +270,7 @@ function App() {
                             </div>
 
                             <div className="col-12 col-md-6 col-xl-4">
-                                <article className="module-card module-card-disabled">
+                                <article className="module-card">
                                     <div className="module-card-stripes" />
 
                                     <div className="module-number">
@@ -274,7 +283,7 @@ function App() {
                                         </div>
 
                                         <div>
-                                            <span className="module-status building">
+                                            <span className="module-status ready">
                                                 Integer Operation
                                             </span>
 
@@ -679,7 +688,8 @@ function App() {
         );
     }
 
-  // MULTIPLICATION PAGE
+
+    // MULTIPLICATION PAGE
     function renderMultiplication() {
         return (
             <main className="machine-page module-page">
@@ -688,87 +698,537 @@ function App() {
                 </section>
 
                 <section className="container-fluid workspace-container">
-                    <div className="row">
+                    <div className="row g-4">
                         {/* INPUT PANEL */}
-                        <div className="col-md-6 mb-4">
-                            <article className="machine-card">
-                                <header>
-                                    <h2>Multiplication Inputs</h2>
+                        <div className="col-12 col-lg-5">
+                            <article className="hud-panel h-100">
+                                <div className="hud-panel-accent" />
+
+                                <header className="hud-panel-header">
+                                    <div>
+                                        <span className="panel-label">
+                                            Input Panel
+                                        </span>
+
+                                        <h2>
+                                            Multiplication Parameters
+                                        </h2>
+                                    </div>
+
+                                    <span className="panel-state">
+                                        Ready
+                                    </span>
                                 </header>
-                                <div className="machine-card-body">
-                                    <div className="form-group mb-3">
-                                        <label htmlFor="multiplicand">Multiplicand</label>
-                                        <input 
-                                            id="multiplicand"
-                                            type="text" 
-                                            className="machine-input" 
-                                            value={multiplicandInput} 
-                                            onChange={(e) => setMultiplicandInput(e.target.value)} 
-                                            placeholder="Enter multiplicand..." 
+
+                                <div className="hud-panel-body">
+                                    <div className="machine-form-group">
+                                        <label htmlFor="multiplicationInputMode">
+                                            Input Type
+                                        </label>
+
+                                        <select
+                                            id="multiplicationInputMode"
+                                            className="form-select machine-form-control"
+                                            value={multiplicationInputMode}
+                                            onChange={(event) => {
+                                                setMultiplicationInputMode(
+                                                    event.target.value as
+                                                        | "decimal"
+                                                        | "binary"
+                                                );
+
+                                                setMultiplicationResult(null);
+                                                setMultiplicationError("");
+                                            }}
+                                        >
+                                            <option value="decimal">
+                                                Decimal
+                                            </option>
+
+                                            <option value="binary">
+                                                Binary
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div className="machine-form-group">
+                                        <label htmlFor="multiplicandInput">
+                                            Multiplicand
+                                        </label>
+
+                                        <input
+                                            id="multiplicandInput"
+                                            className="form-control machine-form-control"
+                                            type="text"
+                                            value={multiplicandInput}
+                                            placeholder={
+                                                multiplicationInputMode ===
+                                                "decimal"
+                                                    ? "Enter multiplicand"
+                                                    : "Enter signed binary multiplicand"
+                                            }
+                                            onChange={(event) =>
+                                                setMultiplicandInput(
+                                                    event.target.value
+                                                )
+                                            }
                                         />
                                     </div>
-                                    <div className="form-group mb-3">
-                                        <label htmlFor="multiplier">Multiplier</label>
-                                        <input 
-                                            id="multiplier"
-                                            type="text" 
-                                            className="machine-input" 
-                                            value={multiplierInput} 
-                                            onChange={(e) => setMultiplierInput(e.target.value)} 
-                                            placeholder="Enter multiplier..." 
+
+                                    <div className="machine-form-group">
+                                        <label htmlFor="multiplierInput">
+                                            Multiplier
+                                        </label>
+
+                                        <input
+                                            id="multiplierInput"
+                                            className="form-control machine-form-control"
+                                            type="text"
+                                            value={multiplierInput}
+                                            placeholder={
+                                                multiplicationInputMode ===
+                                                "decimal"
+                                                    ? "Enter multiplier"
+                                                    : "Enter signed binary multiplier"
+                                            }
+                                            onChange={(event) =>
+                                                setMultiplierInput(
+                                                    event.target.value
+                                                )
+                                            }
+                                            onKeyDown={(event) => {
+                                                if (event.key === "Enter") {
+                                                    handleMultiply();
+                                                }
+                                            }}
                                         />
                                     </div>
-                                    <div className="form-group mb-4">
-                                        <label htmlFor="mulBitSize">Bit Size</label>
-                                        <input 
-                                            id="mulBitSize"
-                                            type="number" 
-                                            className="machine-input" 
-                                            value={multiplicationBitSize} 
-                                            onChange={(e) => setMultiplicationBitSize(Number(e.target.value))} 
-                                        />
+
+                                    <div className="machine-form-group">
+                                        <label htmlFor="multiplicationBitSize">
+                                            Data Size
+                                        </label>
+
+                                        <div className="input-group">
+                                            <input
+                                                id="multiplicationBitSize"
+                                                className="form-control machine-form-control"
+                                                type="number"
+                                                min="2"
+                                                value={multiplicationBitSize}
+                                                onChange={(event) =>
+                                                    setMultiplicationBitSize(
+                                                        Number(
+                                                            event.target.value
+                                                        )
+                                                    )
+                                                }
+                                            />
+
+                                            <span className="input-group-text machine-addon">
+                                                Bits
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="d-flex gap-2">
-                                        <button 
-                                            className="machine-button machine-button-primary flex-grow-1" 
+
+                                    <div className="machine-button-group">
+                                        <button
+                                            type="button"
+                                            className="machine-button machine-button-primary"
                                             onClick={handleMultiply}
                                         >
-                                            Multiply
+                                            <span>
+                                                Execute Multiplication
+                                            </span>
+
+                                            <i className="bi bi-chevron-right" />
                                         </button>
-                                        {/* Assuming you have a clearMultiplication function */}
-                                        <button 
-                                            className="machine-button machine-button-secondary" 
-                                            onClick={() => {
-                                                setMultiplicandInput("");
-                                                setMultiplierInput("");
-                                                // Clear results...
-                                            }}
+
+                                        <button
+                                            type="button"
+                                            className="machine-button machine-button-secondary"
+                                            onClick={clearMultiplication}
                                         >
                                             Clear
                                         </button>
                                     </div>
+
+                                    {multiplicationError && (
+                                        <div
+                                            className="machine-alert"
+                                            role="alert"
+                                        >
+                                            <i className="bi bi-exclamation-triangle" />
+
+                                            <div>
+                                                <strong>
+                                                    Multiplication Error
+                                                </strong>
+
+                                                <span>
+                                                    {multiplicationError}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
+
+                                <footer className="hud-panel-footer">
+                                    <span>
+                                        Input:{" "}
+                                        {multiplicationInputMode.toUpperCase()}
+                                    </span>
+
+                                    <span>
+                                        Data Size:{" "}
+                                        {multiplicationBitSize || "—"} Bit
+                                    </span>
+                                </footer>
                             </article>
                         </div>
 
                         {/* RESULT PANEL */}
-                        <div className="col-md-6 mb-4">
-                            <article className="machine-card h-100">
-                                <header>
-                                    <h2>Output</h2>
-                                </header>
-                                <div className="machine-card-body">
-                                    <div className="result-display">
-                                         <p>Output area for Binary Multiplication logic.</p>
-                                         {/* Map your multiplication results or step-by-step table here */}
+                        <div className="col-12 col-lg-7">
+                            <article className="hud-panel h-100">
+                                <div className="hud-panel-accent" />
+
+                                <header className="hud-panel-header">
+                                    <div>
+                                        <span className="panel-label">
+                                            Result Panel
+                                        </span>
+
+                                        <h2>
+                                            Multiplication Output
+                                        </h2>
                                     </div>
+
+                                    <span
+                                        className={`panel-state ${
+                                            multiplicationResult
+                                                ? "panel-state-complete"
+                                                : ""
+                                        }`}
+                                    >
+                                        {multiplicationResult
+                                            ? "Complete"
+                                            : "Awaiting"}
+                                    </span>
+                                </header>
+
+                                <div className="hud-panel-body">
+                                    {!multiplicationResult ? (
+                                        <div className="empty-result">
+                                            <div className="empty-result-icon">
+                                                <i className="bi bi-x-lg" />
+                                            </div>
+
+                                            <h3>
+                                                Awaiting Input
+                                            </h3>
+
+                                            <p>
+                                                Enter the multiplicand,
+                                                multiplier, input type, and
+                                                data size to begin Booth&apos;s
+                                                multiplication process.
+                                            </p>
+                                        </div>
+                                    ) : (
+                                        <div className="multiplication-result">
+                                            <div className="primary-result multiplication-product">
+                                                <span>
+                                                    Decimal Product
+                                                </span>
+
+                                                <strong>
+                                                    {
+                                                        multiplicationResult.productDecimal
+                                                    }
+                                                </strong>
+
+                                                <code>
+                                                    {
+                                                        multiplicationResult.Product
+                                                    }
+                                                </code>
+                                            </div>
+
+                                            <div className="initial-registers multiplication-registers">
+                                                <div className="register-box">
+                                                    <span>
+                                                        Initial A
+                                                    </span>
+
+                                                    <code>
+                                                        {
+                                                            multiplicationResult
+                                                                .initialStates?.A
+                                                        }
+                                                    </code>
+                                                </div>
+
+                                                <div className="register-box">
+                                                    <span>
+                                                        Initial Q
+                                                    </span>
+
+                                                    <code>
+                                                        {
+                                                            multiplicationResult
+                                                                .initialStates?.Q
+                                                        }
+                                                    </code>
+                                                </div>
+
+                                                <div className="register-box">
+                                                    <span>
+                                                        Initial Q₋₁
+                                                    </span>
+
+                                                    <code>
+                                                        {
+                                                            multiplicationResult
+                                                                .initialStates
+                                                                ?.Q_1
+                                                        }
+                                                    </code>
+                                                </div>
+
+                                                <div className="register-box">
+                                                    <span>
+                                                        M Register
+                                                    </span>
+
+                                                    <code>
+                                                        {
+                                                            multiplicationResult
+                                                                .initialStates?.M
+                                                        }
+                                                    </code>
+                                                </div>
+
+                                                <div className="register-box">
+                                                    <span>
+                                                        M₂ Register
+                                                    </span>
+
+                                                    <code>
+                                                        {
+                                                            multiplicationResult
+                                                                .initialStates
+                                                                ?.M_2
+                                                        }
+                                                    </code>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )}
                                 </div>
-                                <footer className="machine-card-footer mt-auto">
-                                    <span>Status: Awaiting Input</span>
+
+                                <footer className="hud-panel-footer">
+                                    <span>
+                                        Algorithm: Booth&apos;s
+                                    </span>
+
+                                    <span>
+                                        Status:{" "}
+                                        {multiplicationResult
+                                            ? "Completed"
+                                            : "Idle"}
+                                    </span>
                                 </footer>
                             </article>
                         </div>
                     </div>
+
+                    {/* EXECUTION TRACE */}
+                    {multiplicationResult && (
+                        <article className="hud-panel execution-panel mt-4">
+                            <div className="hud-panel-accent" />
+
+                            <header className="hud-panel-header">
+                                <div>
+                                    <span className="panel-label">
+                                        Execution Trace
+                                    </span>
+
+                                    <h2>
+                                        Step-by-Step Process
+                                    </h2>
+                                </div>
+
+                                <span className="panel-state panel-state-complete">
+                                    {multiplicationResult.steps?.length ?? 0}{" "}
+                                    Cycles
+                                </span>
+                            </header>
+
+                            <div className="hud-panel-body">
+                                <div className="table-responsive execution-table-container">
+                                    <table className="table execution-table multiplication-table align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th>Cycle</th>
+                                                <th>Before Operation</th>
+                                                <th>Pair</th>
+                                                <th>Operation</th>
+                                                <th>A After Operation</th>
+                                                <th>After Shift</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {multiplicationResult.steps?.map(
+                                                (step) => (
+                                                    <tr key={step.iteration}>
+                                                        <td>
+                                                            <span className="cycle-badge">
+                                                                {step.iteration}
+                                                            </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <div className="table-register">
+                                                                <span>A</span>
+
+                                                                <code>
+                                                                    {
+                                                                        step.A_before
+                                                                    }
+                                                                </code>
+                                                            </div>
+
+                                                            <div className="table-register">
+                                                                <span>Q</span>
+
+                                                                <code>
+                                                                    {
+                                                                        step.Q_before
+                                                                    }
+                                                                </code>
+                                                            </div>
+
+                                                            <div className="table-register">
+                                                                <span>
+                                                                    Q₋₁
+                                                                </span>
+
+                                                                <code>
+                                                                    {
+                                                                        step.Q_1_before
+                                                                    }
+                                                                </code>
+                                                            </div>
+                                                        </td>
+
+                                                        <td>
+                                                            <span className="pair-badge">
+                                                                {step.pair}
+                                                            </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <span className="operation-badge">
+                                                                {step.operation}
+                                                            </span>
+                                                        </td>
+
+                                                        <td>
+                                                            <code className="table-binary-value">
+                                                                {
+                                                                    step.A_after_operation
+                                                                }
+                                                            </code>
+                                                        </td>
+
+                                                        <td>
+                                                            <div className="table-register">
+                                                                <span>A</span>
+
+                                                                <code>
+                                                                    {
+                                                                        step.A_final
+                                                                    }
+                                                                </code>
+                                                            </div>
+
+                                                            <div className="table-register">
+                                                                <span>Q</span>
+
+                                                                <code>
+                                                                    {
+                                                                        step.Q_final
+                                                                    }
+                                                                </code>
+                                                            </div>
+
+                                                            <div className="table-register">
+                                                                <span>
+                                                                    Q₋₁
+                                                                </span>
+
+                                                                <code>
+                                                                    {
+                                                                        step.Q_1_final
+                                                                    }
+                                                                </code>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                )
+                                            )}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div className="final-restoration multiplication-summary">
+                                    <div>
+                                        <span>
+                                            Final Product
+                                        </span>
+
+                                        <h3>
+                                            Multiplication Complete
+                                        </h3>
+
+                                        <p>
+                                            The final product is formed by
+                                            concatenating the final A and Q
+                                            registers after all Booth cycles
+                                            are completed.
+                                        </p>
+                                    </div>
+
+                                    <div className="restoration-registers">
+                                        <div>
+                                            <span>
+                                                Binary Product
+                                            </span>
+
+                                            <code>
+                                                {
+                                                    multiplicationResult.Product
+                                                }
+                                            </code>
+                                        </div>
+
+                                        <div>
+                                            <span>
+                                                Decimal Product
+                                            </span>
+
+                                            <code>
+                                                {
+                                                    multiplicationResult.productDecimal
+                                                }
+                                            </code>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    )}
                 </section>
             </main>
         );
