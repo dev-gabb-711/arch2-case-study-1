@@ -27,7 +27,6 @@ function App() {
     const [divisionResult, setDivisionResult] = useState<ReturnType<typeof division> | null>(null);
     const [divisionError, setDivisionError] = useState("");
 
-
     // NAVIGATION
     function changePage(page: ActivePage) {
         setActivePage(page);
@@ -36,7 +35,6 @@ function App() {
             behavior: "smooth",
         });
     }
-
 
     // CONVERSION FUNCTIONS
     function handleConvert() {
@@ -143,7 +141,6 @@ function App() {
         setDivisionResult(null);
         setDivisionError("");
     }
-
 
     // HOME PAGE
     function renderHome() {
@@ -684,8 +681,6 @@ function App() {
             </main>
         );
     }
-
-
 
     // DIVISION PAGE
     function renderDivision() {
