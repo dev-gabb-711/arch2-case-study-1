@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { convertDecimal } from "./algorithms/conversion/conversion";
 import { division } from "./algorithms/division/division";
+import { multiplication } from "./algorithms/multiplication/multiplication";
 import "./App.css";
 
 type ActivePage =
@@ -26,6 +27,14 @@ function App() {
     const [inputMode, setInputMode] = useState<"decimal" | "binary">("decimal");
     const [divisionResult, setDivisionResult] = useState<ReturnType<typeof division> | null>(null);
     const [divisionError, setDivisionError] = useState("");
+
+    //  MULTIPLICATION STATES
+    const [multiplicandInput, setMultiplicandInput] = useState("");
+    const [multiplierInput, setMultiplierInput] = useState("");
+    const [multiplicationBitSize, setMultiplicationBitSize] = useState(8);
+    const [multiplicationInputMode, setMultiplicationInputMode] = useState<"decimal" | "binary">("decimal");
+    const [multiplicationResult, setMultiplicationResult] = useState<ReturnType<typeof multiplication> | null>(null);
+    const [multiplicationError, setMultiplicationError] = useState("");
 
     // NAVIGATION
     function changePage(page: ActivePage) {
@@ -140,6 +149,50 @@ function App() {
         setInputMode("decimal");
         setDivisionResult(null);
         setDivisionError("");
+    }
+
+     // MULTIPLICATION FUNCTIONS
+    function handleMultiply() {
+        setMultiplicationError("");
+        setMultiplicationResult(null);
+
+        if (
+            multiplicandInput.trim() === "" ||
+            multiplierInput.trim() === ""
+        ) {
+            setMultiplicationError("Multiplicand and multiplier are required");
+            return;
+        }
+
+        try {
+            const multiplicand =
+                multiplicationInputMode === "decimal"
+                    ? Number(multiplicandInput)
+                    : multiplicandInput.trim();
+
+            const multiplier =
+                multiplicationInputMode === "decimal"
+                    ? Number(multiplierInput)
+                    : multiplierInput.trim();
+
+            const computedMultiplicationResult = multiplication(
+                multiplicand,
+                multiplier,
+                Number(multiplicationBitSize)
+            );
+
+            if (computedMultiplicationResult.error) {
+                setMultiplicationError(computedMultiplicationResult.error);
+            } else {
+                setMultiplicationResult(computedMultiplicationResult);
+            }
+        } catch (error) {
+            if (error instanceof Error) {
+                setMultiplicationError(error.message);
+            } else {
+                setMultiplicationError("An unexpected error occurred.");
+            }
+        }
     }
 
     // HOME PAGE
@@ -626,8 +679,7 @@ function App() {
         );
     }
 
-
-    // MULTIPLICATION PLACEHOLDER
+  // MULTIPLICATION PAGE
     function renderMultiplication() {
         return (
             <main className="machine-page module-page">
@@ -636,47 +688,87 @@ function App() {
                 </section>
 
                 <section className="container-fluid workspace-container">
-                    <article className="hud-panel development-panel">
-                        <div className="hud-panel-accent" />
-
-                        <div className="development-icon">
-                            <i className="bi bi-x-lg" />
+                    <div className="row">
+                        {/* INPUT PANEL */}
+                        <div className="col-md-6 mb-4">
+                            <article className="machine-card">
+                                <header>
+                                    <h2>Multiplication Inputs</h2>
+                                </header>
+                                <div className="machine-card-body">
+                                    <div className="form-group mb-3">
+                                        <label htmlFor="multiplicand">Multiplicand</label>
+                                        <input 
+                                            id="multiplicand"
+                                            type="text" 
+                                            className="machine-input" 
+                                            value={multiplicandInput} 
+                                            onChange={(e) => setMultiplicandInput(e.target.value)} 
+                                            placeholder="Enter multiplicand..." 
+                                        />
+                                    </div>
+                                    <div className="form-group mb-3">
+                                        <label htmlFor="multiplier">Multiplier</label>
+                                        <input 
+                                            id="multiplier"
+                                            type="text" 
+                                            className="machine-input" 
+                                            value={multiplierInput} 
+                                            onChange={(e) => setMultiplierInput(e.target.value)} 
+                                            placeholder="Enter multiplier..." 
+                                        />
+                                    </div>
+                                    <div className="form-group mb-4">
+                                        <label htmlFor="mulBitSize">Bit Size</label>
+                                        <input 
+                                            id="mulBitSize"
+                                            type="number" 
+                                            className="machine-input" 
+                                            value={multiplicationBitSize} 
+                                            onChange={(e) => setMultiplicationBitSize(Number(e.target.value))} 
+                                        />
+                                    </div>
+                                    <div className="d-flex gap-2">
+                                        <button 
+                                            className="machine-button machine-button-primary flex-grow-1" 
+                                            onClick={handleMultiply}
+                                        >
+                                            Multiply
+                                        </button>
+                                        {/* Assuming you have a clearMultiplication function */}
+                                        <button 
+                                            className="machine-button machine-button-secondary" 
+                                            onClick={() => {
+                                                setMultiplicandInput("");
+                                                setMultiplierInput("");
+                                                // Clear results...
+                                            }}
+                                        >
+                                            Clear
+                                        </button>
+                                    </div>
+                                </div>
+                            </article>
                         </div>
 
-                        <span className="development-status">
-                            Module Under Development
-                        </span>
-
-                        <h2>
-                            Multiplication System Building
-                        </h2>
-
-                        <p>
-                            The multiplication algorithm is still
-                            being implemented. Once complete, this
-                            module will include an input console,
-                            result panel, and execution trace.
-                        </p>
-
-                        <div className="development-progress">
-                            <div className="development-progress-track">
-                                <span />
-                            </div>
-
-                            <div className="development-progress-labels">
-                                <span>Implementation</span>
-                                <span>In Progress</span>
-                            </div>
+                        {/* RESULT PANEL */}
+                        <div className="col-md-6 mb-4">
+                            <article className="machine-card h-100">
+                                <header>
+                                    <h2>Output</h2>
+                                </header>
+                                <div className="machine-card-body">
+                                    <div className="result-display">
+                                         <p>Output area for Binary Multiplication logic.</p>
+                                         {/* Map your multiplication results or step-by-step table here */}
+                                    </div>
+                                </div>
+                                <footer className="machine-card-footer mt-auto">
+                                    <span>Status: Awaiting Input</span>
+                                </footer>
+                            </article>
                         </div>
-
-                        <button
-                            type="button"
-                            className="machine-button machine-button-secondary"
-                            onClick={() => changePage("home")}
-                        >
-                            Return Home
-                        </button>
-                    </article>
+                    </div>
                 </section>
             </main>
         );
