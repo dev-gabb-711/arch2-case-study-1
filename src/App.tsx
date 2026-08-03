@@ -1074,7 +1074,7 @@ function App() {
                                                 <th>Pair</th>
                                                 <th>Operation</th>
                                                 <th>A After Operation</th>
-                                                <th>After Shift</th>
+                                                <th>After Shift Right</th>
                                             </tr>
                                         </thead>
 
@@ -1654,10 +1654,10 @@ function App() {
                                             <tr>
                                                 <th>Cycle</th>
                                                 <th>
-                                                    Before Shift
+                                                    Before Shift Left
                                                 </th>
                                                 <th>
-                                                    After Shift
+                                                    After Shift Left
                                                 </th>
                                                 <th>Operation</th>
                                                 <th>

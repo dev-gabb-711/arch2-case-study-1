@@ -1534,14 +1534,14 @@
   display: block;
   margin-bottom: 0.3rem;
   color: var(--machine-green);
-  font-size: 0.54rem;
+  font-size: 0.64rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 
 .restoration-registers code {
   color: var(--machine-white);
-  font-size: 0.75rem;
+  font-size: 0.85rem;
 }
 
 .machine-footer {
