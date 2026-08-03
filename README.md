@@ -126,6 +126,9 @@ Process: Integer arithmetic and conversion.
 - performed final UI testing and polishing to ensure everything functions correctly
 
 ## References
+- CSARCH2 Lecture Materials: Module 2 - Integer Data Type
+- CSARCH2 Lecture Materials: Module 9 - Binary Multiplication
+- CSARCH2 Lecture Materials: Module 10 - Unsigned Binary Division
 
 ## AI Disclosure
-
+The group declares that this assignment is entirely our own work and ideas. All written content, research, programming, and implementation were completed entirely by the group.
