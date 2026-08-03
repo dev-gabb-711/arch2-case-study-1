@@ -61,11 +61,25 @@ Process: Integer arithmetic and conversion.
 - built the home page and module layouts
 - implemented responsive layouts for different screen sizes
 - integrated the completed multiplication implementation into the interface
+- Implemented Booth's Multiplication algorithm.
+- Added support for decimal and binary operands.
+- Implemented Booth operation selection using the Q₀Q₋₁ bit pair.
+- Implemented addition and subtraction using two's complement.
+- Added arithmetic right shift after each iteration.
+- Recorded register states (A, Q, Q₋₁, M, and M₂) for visualization.
+- Generated final binary and decimal product outputs.
 
 **August 3, 2026**
+- Refactored multiplication implementation.
+- Improved input validation and error handling.
+- Fixed Booth subtraction using two's complement.
+- Improved register state tracking and iteration logging.
+- Added comprehensive Vitest unit tests.
+- Started transition from unsigned to signed Booth multiplication.
 - finalized the application design and layout
 - improved responsiveness, typography, and overall readability
 - performed final UI testing and polishing to ensure everything functions correctly
+
 
 ## References
 
