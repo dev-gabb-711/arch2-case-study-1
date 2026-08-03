@@ -137,7 +137,7 @@
   padding: 0.4rem 0;
   color: var(--machine-white) !important;
   font-family: var(--font-display);
-  font-size: clamp(0.95rem, 1.4vw, 1.3rem);
+  font-size: clamp(0.82rem, 1.1vw, 1.05rem);
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -644,6 +644,11 @@
   color: var(--machine-green-bright);
   font-size: clamp(1.15rem, 1.8vw, 1.55rem);
   letter-spacing: 0.07em;
+}
+
+.multiplication-home-card h2 {
+  font-size: clamp(1rem, 1.55vw, 1.35rem);
+  letter-spacing: 0.045em;
 }
 
 .module-card p {
@@ -1384,7 +1389,7 @@
 
 .execution-table {
   min-width: 1050px;
-  font-size: 0.72rem;
+  font-size: 0.82rem;
 }
 
 .execution-table thead {
@@ -1394,7 +1399,7 @@
 .execution-table th {
   padding: 0.7rem;
   color: var(--machine-green);
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 600;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -1422,8 +1427,9 @@
 .q-zero {
   display: inline-grid;
   place-items: center;
-  width: 2rem;
-  height: 2rem;
+  width: 2.25rem;
+  height: 2.25rem;
+  font-size: 0.82rem;
   color: #001706;
   font-family: var(--font-mono);
   font-weight: 700;
@@ -1452,14 +1458,14 @@
 
 .table-register span {
   color: var(--machine-green);
-  font-size: 0.58rem;
+  font-size: 0.68rem;
   font-weight: 600;
 }
 
 .table-register code,
 .table-binary-value {
   color: var(--machine-white);
-  font-size: 0.72rem;
+  font-size: 0.84rem;
   white-space: nowrap;
 }
 
@@ -1468,6 +1474,7 @@
   padding: 0.4rem 0.55rem;
   color: var(--machine-green-bright);
   font-family: var(--font-mono);
+  font-size: 0.74rem;
   border: 1px solid rgba(118, 255, 137, 0.22);
   background: rgba(118, 255, 137, 0.04);
   white-space: nowrap;
@@ -1552,6 +1559,29 @@
 }
 
 /* =========================================================
+   FOR SMALL SCREENS
+   ========================================================= */
+@media (max-width: 1399.98px) {
+  .module-card-content {
+    grid-template-columns: 3.5rem minmax(0, 1fr);
+    gap: 0.75rem;
+  }
+  .module-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    font-size: 1.7rem;
+  }
+  .module-card h2 {
+    font-size: clamp(1rem, 1.7vw, 1.35rem);
+    letter-spacing: 0.045em;
+    overflow-wrap: anywhere;
+  }
+  .multiplication-home-card h2 {
+    font-size: clamp(0.95rem, 1.5vw, 1.22rem);
+  }
+}
+
+/* =========================================================
    TABLET
    ========================================================= */
 @media (max-width: 991.98px) {
@@ -1610,6 +1640,19 @@
     min-height: calc(100dvh - var(--machine-navbar-height));
     overflow: hidden;
     transform: none;
+  }
+  .module-card-content {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  .module-icon {
+    width: 3.6rem;
+    height: 3.6rem;
+  }
+  .module-card h2 {
+    overflow-wrap: anywhere;
+    word-break: normal;
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
   }
 }
 

@@ -270,7 +270,7 @@ function App() {
                             </div>
 
                             <div className="col-12 col-md-6 col-xl-4">
-                                <article className="module-card">
+                                <article className="module-card multiplication-home-card">
                                     <div className="module-card-stripes" />
 
                                     <div className="module-number">
