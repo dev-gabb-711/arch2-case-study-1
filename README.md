@@ -3,6 +3,52 @@
 
 ## Screenshot Outputs
 
+### Conversion
+
+#### Normal
+![C1](screenshots/C1.png)
+
+#### Special
+![C2](screenshots/C2.png)
+
+#### Edge
+![C3](screenshots/C3.png)
+
+#### Different Input
+![C4](screenshots/C4.png)
+
+### Multiplication
+
+#### Normal
+![M1](screenshots/M1.png)
+![M1-2](screenshots/M1-2.png)
+
+#### Special
+![M2](screenshots/M2.png)
+![M2-2](screenshots/M2-2.png)
+
+#### Edge
+![M3](screenshots/M3.png)
+
+#### Different Input
+![M4](screenshots/M4.png)
+
+### Division
+
+#### Normal
+![N1](screenshots/N1.png)
+![N1-2](screenshots/N1-2.png)
+
+#### Special
+![N2](screenshots/N2.png)
+![N2-2](screenshots/N2-2.png)
+
+#### Edge
+![N3](screenshots/N3.png)
+
+#### Different Input
+![N4](screenshots/N4.png)
+
 ## Video Walkthrough
 [CSARCH2 Integer Machine Demo](https://youtu.be/RMndn7gSBW0)
 
@@ -78,7 +124,6 @@ Process: Integer arithmetic and conversion.
 - finalized the application design and layout
 - improved responsiveness, typography, and overall readability
 - performed final UI testing and polishing to ensure everything functions correctly
-
 
 ## References
 
