@@ -2,10 +2,9 @@
 ## Group 6 CSARCH2-S04
 
 ## Screenshot Outputs
-- TBD
 
 ## Video Walkthrough
-- Link Here
+[CSARCH2 Integer Machine Demo](https://youtu.be/RMndn7gSBW0)
 
 ## Specifications:
 **General Directions:**
