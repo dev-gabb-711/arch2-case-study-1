@@ -37,6 +37,10 @@ Process: Integer arithmetic and conversion.
 
 ## Incremental Progress
 
+**July 27, 2026**
+- initialized React project with Vite
+- implemented, displayed, and fully tested conversion algorithm
+
 **July 30, 2026**
 - implemented DivisionStates and DivisionResult, added partial pseudocode for division function
 
