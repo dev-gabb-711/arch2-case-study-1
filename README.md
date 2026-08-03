@@ -43,9 +43,29 @@ Process: Integer arithmetic and conversion.
 
 **July 30, 2026**
 - implemented DivisionStates and DivisionResult, added partial pseudocode for division function
+- planned and drafted the Vitest test cases for the non-restoring division implementation
+- began conceptualizing the user interface and identified reusable design elements from the previous CSARCH2 project
+
 
 **July 31, 2026**
 - implemented 2's complement and binary addition helper functions, added input checking and formatting for division operands, implemented non-restoring division
+- Started adapting the previous project's UI components for the Integer Machine interface
+
+**August 1, 2026**
+- completed and expanded the division Vitest test suite
+- strengthened division input validation and handled additional edge cases
+- added step-by-step state recording for the non-restoring division algorithm to support solution visualization
+
+**August 2, 2026**
+- designed the user interface using Bootstrap components combined with recycled CSARCH2 UI elements
+- built the home page and module layouts
+- implemented responsive layouts for different screen sizes
+- integrated the completed multiplication implementation into the interface
+
+**August 3, 2026**
+- finalized the application design and layout
+- improved responsiveness, typography, and overall readability
+- performed final UI testing and polishing to ensure everything functions correctly
 
 ## References
 
